@@ -1,30 +1,9 @@
-### [ReScience C](https://rescience.github.io/) article template
+### Reproducibility report for "Stokes drag on conglomerates of spheres"
 
-This repository contains the Latex (optional) template for writing a ReScience
-C article and the (mandatory) YAML metadata file. For the actual article,
-you're free to use any software you like as long as you enforce the proposed
-PDF style. A tool is available for the latex template that produces latex
-definitions from the metadata file. If you use another software, make sure that
-metadata and PDF are always synced.
+Contribution to the ["Ten Years Reproducibility Challenge"](https://github.com/ReScience/ten-years) run by [ReScience C](https://rescience.github.io/).
 
-You can also use overleaf with the [provided template](https://www.overleaf.com/read/kfrwdmygjyqw) but in this case, you'll have to enter `metadata.tex` manually.
+**Reference:** Cichocki B, Hinsen K (1995) Stokes drag on conglomerates of spheres. Phys. Fluids 7:286. [DOI:10.1063/1.868626](https://doi.org/10.1063/1.868626)
 
-#### Usage
+**Open access version:** none. I have prepared a [summary](summary.org) which contains in particular the results that I plan to reproduce.
 
-For a submission, fill in information in
-[metadata.yaml](./metadata.yaml), modify [content.tex](content.tex)
-and type:
-
-```bash
-$ make 
-```
-
-This will produce an `article.pdf` using xelatex and provided font.
-
-
-After acceptance, you'll need to complete [metadata.yaml](./metadata.yaml) with information provided by the editor and type again:
-
-```bash
-$ make
-```
-
+I update my [notes](notes.org) as the work progresses. Most of the repository consists of a copy of the [ReScience article template](https://github.com/ReScience/template) which has so far not been modified.

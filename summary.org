@@ -1,0 +1,50 @@
+Summary of "Stokes drag on conglomerates of spheres" by B. Cichocki and K. Hinsen,
+Phys. Fluids 7:286 (1995), [[https://doi.org/10.1063/1.868626][DOI:10.1063/1.868626]]
+
+* Abstract
+The Stokes drag coefficients for conglomerates of between two and 167 spheres are obtained from a recently developed scheme for numerical calculations of hydrodynamic interactions [J. Chem. Phys. **100**, 3780 (1994)]. Experimental data for these conglomerates were provided by Lasso and Weidmann [Phys. Fluids **29**, 3921 (1986)].  The numerical results and the experimental data agree very well. It is shown that in numerical calculations of hydrodynamic interactions, all long-range contributions must be included exactly.
+
+* Motivation
+Hydrodynamic interactions play an important role for dense solutions of solid particles in a liquid. This scenario covers many biological fluids (blood, milk), natural mixtures (sand/water and sand/oil below the oceans), and synthetic products (e.g. paint). In a description of such systems by hydrodynamic interactions, the liquid is not taken into account explicitly, but only appears as the source of interactions between the immersed particles.
+
+Many approximations, analytical and numerical, have been developed for approximating hydrodynamic interactions, whose exact computation would be computationally very expensive. We have developed a numerical approximation ourselves [[[https://aip.scitation.org/doi/full/10.1063/1.466366][J. Chem. Phys. **100**, 3780 (1994)]]] and now test it by confrontation with experimental measurements on hand-made conglomerates of latex spheres [[[http://doi.org/10.1063/1.865732][Phys. Fluids **29**, 3921 (1986)]]]. These conglomerates were immersed into a liquid, and their sedimentation velocity under the influence of gravity was measured.
+
+Our model consists of ideal hard spheres assembled into the same conglomerates as used in the experiments. We impose a rigid-body constraint on each conglomerate, and compute its velocity under a force that acts in the same direction as gravity in the experimental setup. Our computations are equivalent to computing the friction, mobility, or diffusion coefficient of each conglomerate, as all these quantities are closely related.
+
+* Results
+
+The conglomerates are labelled by the number N of spheres they contain. The main result is table III, which compares the experimental measurements for the sedimentation velocity ratio KS to the values computed from our model. In this ratio, the sedimentation velocity is normalized by the sedimentation velocity of a single sphere that has the same volume as the N spheres making up a conglomerate. Another interesting result from the theoretical point of view is the convergence of the numerical results with increasing order L of approximation (which is basically a multipole expansion of the velocity field around each sphere). This is shown in Fig. 3 in the original paper, the numerical values of which are reproduced below. The column "final" corresponds to L=4 for the smaller conglomerates (N=55 or less) and to L=4 for the larger ones. Convergence is discussed in detail in the article. Back then, the L=4 computation was not feasible for the larger conglomerates.
+
+** Table III
+
+|   N | KS (experiment) | KS (numerical) |
+|-----+-----------------+----------------|
+|   3 |           0.837 |         0.8363 |
+|   5 |           0.913 |         0.9274 |
+|  13 |           0.875 |         0.8806 |
+|  55 |           0.863 |         0.8677 |
+|  57 |           0.884 |          0.874 |
+| 147 |           0.854 |          0.867 |
+| 153 |           0.855 |          0.877 |
+| 167 |           0.872 |          0.892 |
+
+** Values shown in Fig. 3
+
+|   N |    L=1 |    L=2 |  final |
+|-----+--------+--------+--------|
+|   5 | 0.8194 | 0.9158 | 0.9274 |
+|  13 | 0.5931 | 0.8437 | 0.8806 |
+|  55 | 0.2723 | 0.7284 | 0.8677 |
+|  57 | 0.2623 |  0.733 |  0.874 |
+| 147 | 0.1413 | 0.5957 |  0.867 |
+| 153 | 0.1347 | 0.6029 |  0.877 |
+| 167 | 0.1258 | 0.5955 |  0.892 |
+
+** Performance
+The performance values quoted in the original article are perhaps of historical interest:
+
+#+begin_quote
+For 13 particles, the L=3 calculation requires 20 s and 3 MB of memory. For L=3t, these numbers reduce to 11 s and 1.5 MB. For 55 particles at L=3t, we need 965 s and 16 MB. The calculations were performed using double-precision arithmetic on a DECstation 5000/260.
+#+end_quote
+
+L=3t refers to L=3 with an additional approximation made to reduce time and memory requirements.
