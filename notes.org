@@ -12,9 +12,11 @@ Catalogue number ADBK.
 Program obtainable from: CPC Program Library, Queen's University of Belfast, N. Ireland (see application form in this issue).
 #+end_quote
 
-The journal still exists, and its home page contains a link to today's [[https://data.mendeley.com/datasets/journals/00104655][CPC Program Library]], but I have not been able to find HYDROLIB there. I have contacted the "principal editor and library director" with the question of how old software can be retrived.
+The journal still exists, and its home page contains a link to today's [[https://data.mendeley.com/datasets/journals/00104655][CPC Program Library]], but I have not been able to find HYDROLIB there. I contacted the editor and received the reply that the old archive is still available at http://cpc.cs.qub.ac.uk/, and that its entries would soon be transferred to the new archive. I could retrieve HYDROLIB using the catalogue number from the paper.
 
-A few years ago, I found a copy of HYDROLIB on the hard disk of an old computer, and put it [[https://github.com/khinsen/HYDROLIB][on GitHub]]. This is very probably the version that was published in CPC, though I cannot be completely certain. I have since made minor fixes to the setup scripts in order to support more recent compilers, following requests by new users of the library. For the curious: the most recent support request for HYDROLIB is from 2017.
+A few years ago, I found a copy of HYDROLIB on the hard disk of an old computer, and put it [[https://github.com/khinsen/HYDROLIB][on GitHub]]. I assumed that this was the version that was published in CPC, though I could not be completely certain. A comparison with the code from the CPC archive shows that the GitHub code contains two bug fixes from 2002 (an integer variable was erroneously declared as real or double precision). Moreover, a file with numerical coefficients has differences, and it's the GitHub version that looks erroneous, containing zero bytes in the middle of a text file. A so-far undetected case of data corruption! It is unlikely to have had serious consequences because it concerns only the lowest-level approximation, which is not very good anyway and therefore hardly used.
+
+Since the initial publication on GitHub, I made minor fixes to the setup scripts in order to support more recent compilers, following requests by new users of the library. For the curious: the most recent support request for HYDROLIB is from 2017.
 
 So far I have not been able to find the unpublished application programs. I have two backup tapes in DDS-1 and DDS-2 format from 1998 and 1999 that most probably contain a copy, but so far I have not been able to find a reader for these tapes. Until about 2010, I still had a PC with a tape reader in my office.
 
@@ -23,3 +25,6 @@ So far I have not been able to find the unpublished application programs. I have
 [[/home/hinsen/Zotero/storage/INTW9ZVS/Lasso_Weidman_1986_Stokes%20drag%20on%20hollow%20cylinders%20and%20conglomerates.pdf][Experimental reference]] (local file)
 [[/home/hinsen/Zotero/storage/RBD48WXU/Hinsen%20-%201995%20-%20HYDROLIB%20a%20library%20for%20the%20evaluation%20of%20hydrodyn.pdf][HYDROLIB paper]] (local file)
 
+https://github.com/khinsen/HYDROLIB/archive/3db2c356a5c426f47c45c0dbbd9624414b7b50d5.zip
+
+https://github.com/khinsen/HYDROLIB/commit/3db2c356a5c426f47c45c0dbbd9624414b7b50d5
