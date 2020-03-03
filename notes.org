@@ -23,21 +23,14 @@ So far I have not been able to find the unpublished application programs. I have
 * Reproducible HYDROLIB installation and test run
 The version of HYDROLIB that I published on GitHub in 2015, with modifications to the installation procedure for GNU Fortran under Linux, still works fine today. For the record, this is how installing and running the example application is done under Guix:
 
-First, note the version of Guix we are using:
-#+begin_src sh :results output :exports both
-guix describe
-#+end_src
+** Fix the Guix version
+To use the current Guix version on your system (the one from your last =guix pull=), replace =guix-command= by a plain =guix=.
+#+NAME: guix-command
+guix time-machine --commit=f76c16d220e6c349441c08bf25a5197037490fa5 --
 
-#+RESULTS:
-: Generation 22	Feb 29 2020 15:17:50	(current)
-:   guix f76c16d
-:     repository URL: https://git.savannah.gnu.org/git/guix.git
-:     branch: master
-:     commit: f76c16d220e6c349441c08bf25a5197037490fa5
-
-Then download and unpack the source code:
-#+begin_src sh :results output :exports both
-guix environment --pure --ad-hoc wget unzip coreutils
+** Download and unpack the source code
+#+begin_src sh :results output :exports both :var guix_command=guix-command
+$guix_command environment --pure --ad-hoc wget unzip coreutils
 wget -O hydrolib.zip https://github.com/khinsen/HYDROLIB/archive/c0e7834a17c7046a6e4c0a27b980aaf5919aecd5.zip
 unzip hydrolib.zip
 rm hydrolib.zip
@@ -234,17 +227,18 @@ c0e7834a17c7046a6e4c0a27b980aaf5919aecd5
   inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/local.def  
 #+end_example
 
+** HYDROLIB configuration
 Uncomment the lines for =gfortran= in the configuration file:
-#+begin_src sh :results output :exports both
+#+begin_src sh :results output :exports both :var guix_command=guix-command
 cd HYDROLIB
-guix environment --pure --ad-hoc sed -- sed -i '8,13s/#set/set/' local.def
+$guix_command environment --pure --ad-hoc sed -- sed -i '8,13s/#set/set/' local.def
 #+end_src
 
 #+RESULTS:
 
 Show the relevant lines for inspection:
-#+begin_src sh :results output :exports both
-guix environment --pure --ad-hoc coreutils -- head -15 HYDROLIB/local.def
+#+begin_src sh :results output :exports both :var guix_command=guix-command
+$guix_command environment --pure --ad-hoc coreutils -- head -15 HYDROLIB/local.def
 #+end_src
 
 #+RESULTS:
@@ -267,9 +261,9 @@ set dpoption = -fdefault-real-8
 #+end_example
 
 Replace =!/bin/csh= by its Guix equivalent in the four csh scripts:
-#+begin_src sh :results output :exports both
+#+begin_src sh :results output :exports both :var guix_command=guix-command
 cd HYDROLIB
-guix environment --pure --ad-hoc sed tcsh coreutils
+$guix_command environment --pure --ad-hoc sed tcsh coreutils
 tcsh=`readlink $GUIX_ENVIRONMENT/bin/tcsh`
 for FILE in install_lib hydrolib/fprog.temp hydrolib/fcomp hydrolib/fc.temp
 do
@@ -279,10 +273,12 @@ done
 
 #+RESULTS:
 
-Run the installation script:
-#+begin_src sh :results output :exports both
+** HYDROLIB compilation/installation
+This is not an installation in the modern sense of the word: nothing happens outside of the HYDROLIB directory.
+
+#+begin_src sh :results output :exports both :var guix_command=guix-command
 cd HYDROLIB
-guix environment --pure --ad-hoc tcsh coreutils make sed grep gfortran-toolchain -- tcsh install_lib
+$guix_command environment --pure --ad-hoc tcsh coreutils make sed grep gfortran-toolchain -- tcsh install_lib
 #+end_src
 
 #+RESULTS:
@@ -458,10 +454,10 @@ ranlib liblapack.a
 ./fcomp lubrication_dp.f lubricationpbc.o -DPERIODIC -DDP
 #+end_example
 
-Compile and run the example application:
-#+begin_src sh :results output :exports both
+** Compile and run the example application
+#+begin_src sh :results output :exports both :var guix_command=guix-command
 cd HYDROLIB
-guix environment --pure --ad-hoc tcsh coreutils sed gawk grep gfortran-toolchain
+$guix_command environment --pure --ad-hoc tcsh coreutils sed gawk grep gfortran-toolchain
 ./fc example.f
 ./a.out
 #+end_src
@@ -473,8 +469,8 @@ guix environment --pure --ad-hoc tcsh coreutils sed gawk grep gfortran-toolchain
 
 ** List all dependencies with version numbers
 The Guile script =show-dependencies.scm= performs a deep dependency analysis starting from the packages listed on the command line. See [[https://guix.gnu.org/blog/2020/reproducible-computations-with-guix/][this blog post]] for an explanation of what the three different levels of dependencies mean precisely.
-#+begin_src sh :results output :exports both
-guix environment --container --ad-hoc guix guile -- guile -s show-dependencies.scm wget unzip tcsh coreutils sed gawk grep make gfortran-toolchain 
+#+begin_src sh :results output :exports both :var guix_command=guix-command
+$guix_command environment --container --ad-hoc guix guile -- guile -s show-dependencies.scm wget unzip tcsh coreutils sed gawk grep make gfortran-toolchain 
 #+end_src
 
 #+RESULTS:
