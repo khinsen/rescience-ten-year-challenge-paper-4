@@ -20,11 +20,453 @@ Since the initial publication on GitHub, I made minor fixes to the setup scripts
 
 So far I have not been able to find the unpublished application programs. I have two backup tapes in DDS-1 and DDS-2 format from 1998 and 1999 that most probably contain a copy, but so far I have not been able to find a reader for these tapes. Until about 2010, I still had a PC with a tape reader in my office.
 
-* References
-[[file:/home/hinsen/Zotero/storage/9537GSQ4/Phys%20Fluids_7_285.pdf][Original article (PDF)]] (local file)
-[[/home/hinsen/Zotero/storage/INTW9ZVS/Lasso_Weidman_1986_Stokes%20drag%20on%20hollow%20cylinders%20and%20conglomerates.pdf][Experimental reference]] (local file)
-[[/home/hinsen/Zotero/storage/RBD48WXU/Hinsen%20-%201995%20-%20HYDROLIB%20a%20library%20for%20the%20evaluation%20of%20hydrodyn.pdf][HYDROLIB paper]] (local file)
+* Reproducible HYDROLIB installation and test run
+The version of HYDROLIB that I published on GitHub in 2015, with modifications to the installation procedure for GNU Fortran under Linux, still works fine today. For the record, this is how installing and running the example application is done under Guix:
 
-https://github.com/khinsen/HYDROLIB/archive/3db2c356a5c426f47c45c0dbbd9624414b7b50d5.zip
+First, note the version of Guix we are using:
+#+begin_src sh :results output :exports both
+guix describe
+#+end_src
 
-https://github.com/khinsen/HYDROLIB/commit/3db2c356a5c426f47c45c0dbbd9624414b7b50d5
+#+RESULTS:
+: Generation 22	Feb 29 2020 15:17:50	(current)
+:   guix f76c16d
+:     repository URL: https://git.savannah.gnu.org/git/guix.git
+:     branch: master
+:     commit: f76c16d220e6c349441c08bf25a5197037490fa5
+
+Then download and unpack the source code:
+#+begin_src sh :results output :exports both
+guix environment --pure --ad-hoc wget unzip coreutils
+wget -O hydrolib.zip https://github.com/khinsen/HYDROLIB/archive/c0e7834a17c7046a6e4c0a27b980aaf5919aecd5.zip
+unzip hydrolib.zip
+rm hydrolib.zip
+mv HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5 HYDROLIB
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Archive:  hydrolib.zip
+c0e7834a17c7046a6e4c0a27b980aaf5919aecd5
+   creating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/.gitignore  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/LICENSE.txt  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/README  
+   creating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/Makefile  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/daxpy.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dcopy.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/ddot.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dgemm.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dgemv.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dger.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dnrm2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/drot.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dscal.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dspr.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dswap.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dsymv.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dsyr.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dsyr2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dsyr2k.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dsyrk.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dtpsv.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dtrmm.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dtrmv.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/dtrsm.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/idamax.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/isamax.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/lsame.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/saxpy.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/scopy.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/sdot.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/sgemm.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/sgemv.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/sger.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/snrm2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/srot.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/sscal.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/sspr.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/sswap.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/ssymv.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/ssyr.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/ssyr2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/ssyr2k.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/ssyrk.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/stpsv.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/strmm.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/strmv.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/strsm.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/blas/xerbla.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/config.h  
+   creating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/doc/
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/doc/guide.tex  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/example.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/example.h  
+   creating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/fc.temp  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/fcomp  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/fn  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/fprog.temp  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/gcalc.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/gcalc_dp.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/hcoeff  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/lubrication.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/lubrication_dp.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/makefile  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/ocoeff  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/pbc.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/pbc_dp.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/rigid.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/rigid_dp.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/subr.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/subr_dp.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/z2cl0  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/z2cl1  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/z2cl2  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/hydrolib/z2cl3  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/install_lib  
+   creating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lalib/
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lalib/README  
+   creating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/Makefile  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dgesv.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dgetf2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dgetrf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dgetri.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dgetrs.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlacon.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlae2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlaev2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlamch.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlansy.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlapy2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlarf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlarfb.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlarfg.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlarft.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlartg.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlasr.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlassq.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlaswp.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlasyf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlatrd.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlauu2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlauum.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dlazro.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dorg2l.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dorg2r.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dorgql.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dorgqr.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dorgtr.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dpotf2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dpotrf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dpotri.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dpotrs.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dpptrf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dpptrs.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dsptrf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dsptrs.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dsteqr.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dsterf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dsycon.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dsyev.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dsytd2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dsytf2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dsytrd.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dsytrf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dsytri.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dsytrs.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dtrti2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/dtrtri.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/ilaenv.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/lsame.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/sgesv.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/sgetf2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/sgetrf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/sgetri.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/sgetrs.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slacon.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slae2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slaev2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slamch.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slansy.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slapy2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slarf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slarfb.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slarfg.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slarft.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slartg.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slasr.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slassq.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slaswp.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slasyf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slatrd.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slauu2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slauum.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/slazro.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/sorg2l.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/sorg2r.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/sorgql.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/sorgqr.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/sorgtr.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/spotf2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/spotrf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/spotri.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/spotrs.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/spptrf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/spptrs.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/ssptrf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/ssptrs.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/ssteqr.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/ssterf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/ssycon.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/ssyev.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/ssytd2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/ssytf2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/ssytrd.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/ssytrf.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/ssytri.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/ssytrs.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/strti2.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/strtri.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/lapack/xerbla.f  
+  inflating: HYDROLIB-c0e7834a17c7046a6e4c0a27b980aaf5919aecd5/local.def  
+#+end_example
+
+Uncomment the lines for =gfortran= in the configuration file:
+#+begin_src sh :results output :exports both
+cd HYDROLIB
+guix environment --pure --ad-hoc sed -- sed -i '8,13s/#set/set/' local.def
+#+end_src
+
+#+RESULTS:
+
+Show the relevant lines for inspection:
+#+begin_src sh :results output :exports both
+guix environment --pure --ad-hoc coreutils -- head -15 HYDROLIB/local.def
+#+end_src
+
+#+RESULTS:
+#+begin_example
+#
+# Some definitions depending on the local installation
+#
+
+# Fortran compiler peculiarities
+
+# gfortran
+setenv FC gfortran
+setenv RANLIB ranlib
+setenv FCFLAGS1 "-ffree-line-length-none -ffixed-line-length-none -c -O"
+setenv FCFLAGS2 "-ffree-line-length-none -ffixed-line-length-none -O"
+set cpp = 1
+set dpoption = -fdefault-real-8
+
+# DEC, Silicon Graphics
+#+end_example
+
+Replace =!/bin/csh= by its Guix equivalent in the four csh scripts:
+#+begin_src sh :results output :exports both
+cd HYDROLIB
+guix environment --pure --ad-hoc sed tcsh coreutils
+tcsh=`readlink $GUIX_ENVIRONMENT/bin/tcsh`
+for FILE in install_lib hydrolib/fprog.temp hydrolib/fcomp hydrolib/fc.temp
+do
+  sed -i s:#!/bin/csh:#!$tcsh: $FILE
+done
+#+end_src
+
+#+RESULTS:
+
+Run the installation script:
+#+begin_src sh :results output :exports both
+cd HYDROLIB
+guix environment --pure --ad-hoc tcsh coreutils make sed grep gfortran-toolchain -- tcsh install_lib
+#+end_src
+
+#+RESULTS:
+#+begin_example
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O daxpy.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dgemm.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dnrm2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dspr.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsyr.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsyrk.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dtrmv.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O lsame.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dcopy.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dgemv.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O drot.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dswap.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsyr2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dtpsv.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dtrsm.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O xerbla.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ddot.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dger.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dscal.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsymv.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsyr2k.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dtrmm.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O idamax.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O saxpy.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sgemm.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O snrm2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sspr.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssyr.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssyrk.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O strmv.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O scopy.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sgemv.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O srot.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sswap.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssyr2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O stpsv.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O strsm.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sdot.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sger.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sscal.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssymv.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssyr2k.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O strmm.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O isamax.f
+ar r libblas.a daxpy.o dgemm.o dnrm2.o dspr.o dsyr.o dsyrk.o dtrmv.o lsame.o dcopy.o dgemv.o drot.o dswap.o dsyr2.o dtpsv.o dtrsm.o xerbla.o ddot.o dger.o dscal.o dsymv.o dsyr2k.o dtrmm.o idamax.o saxpy.o sgemm.o snrm2.o sspr.o ssyr.o ssyrk.o strmv.o scopy.o sgemv.o srot.o sswap.o ssyr2.o stpsv.o strsm.o sdot.o sger.o sscal.o ssymv.o ssyr2k.o strmm.o isamax.o
+ranlib libblas.a
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dgesv.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlaev2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlarft.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlauu2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dorgtr.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsptrf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsytf2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ilaenv.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dgetf2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlamch.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlartg.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlauum.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dpotf2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsptrs.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsytrd.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O lsame.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dgetrf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlansy.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlasr.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlazro.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dpotrf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsteqr.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsytrf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O xerbla.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dgetri.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlapy2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlassq.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dorg2l.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dpotri.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsterf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsytri.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dgetrs.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlarf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlaswp.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dorg2r.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dpotrs.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsycon.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsytrs.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlacon.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlarfb.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlasyf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dorgql.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dpptrf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsyev.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dtrti2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlae2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlarfg.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dlatrd.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dorgqr.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dpptrs.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dsytd2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O dtrtri.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sgesv.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slaev2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slarft.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slauu2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sorgtr.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssptrf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssytf2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sgetf2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slamch.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slartg.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slauum.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O spotf2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssptrs.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssytrd.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sgetrf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slansy.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slasr.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slazro.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O spotrf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssteqr.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssytrf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sgetri.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slapy2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slassq.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sorg2l.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O spotri.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssterf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssytri.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sgetrs.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slarf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slaswp.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sorg2r.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O spotrs.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssycon.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssytrs.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slacon.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slarfb.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slasyf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sorgql.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O spptrf.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssyev.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O strti2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slae2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slarfg.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O slatrd.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O sorgqr.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O spptrs.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O ssytd2.f
+gfortran -ffree-line-length-none -ffixed-line-length-none -c -O strtri.f
+ar r liblapack.a dgesv.o dlaev2.o dlarft.o dlauu2.o dorgtr.o dsptrf.o dsytf2.o ilaenv.o dgetf2.o dlamch.o dlartg.o dlauum.o dpotf2.o dsptrs.o dsytrd.o lsame.o dgetrf.o dlansy.o dlasr.o dlazro.o dpotrf.o dsteqr.o dsytrf.o xerbla.o dgetri.o dlapy2.o dlassq.o dorg2l.o dpotri.o dsterf.o dsytri.o dgetrs.o dlarf.o dlaswp.o dorg2r.o dpotrs.o dsycon.o dsytrs.o dlacon.o dlarfb.o dlasyf.o dorgql.o dpptrf.o dsyev.o dtrti2.o dlae2.o dlarfg.o dlatrd.o dorgqr.o dpptrs.o dsytd2.o dtrtri.o sgesv.o slaev2.o slarft.o slauu2.o sorgtr.o ssptrf.o ssytf2.o sgetf2.o slamch.o slartg.o slauum.o spotf2.o ssptrs.o ssytrd.o sgetrf.o slansy.o slasr.o slazro.o spotrf.o ssteqr.o ssytrf.o sgetri.o slapy2.o slassq.o sorg2l.o spotri.o ssterf.o ssytri.o sgetrs.o slarf.o slaswp.o sorg2r.o spotrs.o ssycon.o ssytrs.o slacon.o slarfb.o slasyf.o sorgql.o spptrf.o ssyev.o strti2.o slae2.o slarfg.o slatrd.o sorgqr.o spptrs.o ssytd2.o strtri.o
+ranlib liblapack.a
+./fcomp gcalc.f gcalc0.o -D_LM_=0 
+./fcomp gcalc.f gcalcpbc0.o -D_LM_=0 -DPERIODIC 
+./fcomp gcalc.f gcalc1.o -D_LM_=1 
+./fcomp gcalc.f gcalcpbc1.o -D_LM_=1 -DPERIODIC 
+./fcomp gcalc.f gcalc2.o -D_LM_=2 
+./fcomp gcalc.f gcalcpbc2.o -D_LM_=2 -DPERIODIC 
+./fcomp gcalc.f gcalc3.o -D_LM_=3 
+./fcomp gcalc.f gcalcpbc3.o -D_LM_=3 -DPERIODIC 
+./fcomp lubrication.f lubrication.o 
+./fcomp lubrication.f lubricationpbc.o -DPERIODIC 
+./fcomp gcalc_dp.f gcalc0.o -D_LM_=0 -DDP
+./fcomp gcalc_dp.f gcalcpbc0.o -D_LM_=0 -DPERIODIC -DDP
+./fcomp gcalc_dp.f gcalc1.o -D_LM_=1 -DDP
+./fcomp gcalc_dp.f gcalcpbc1.o -D_LM_=1 -DPERIODIC -DDP
+./fcomp gcalc_dp.f gcalc2.o -D_LM_=2 -DDP
+./fcomp gcalc_dp.f gcalcpbc2.o -D_LM_=2 -DPERIODIC -DDP
+./fcomp gcalc_dp.f gcalc3.o -D_LM_=3 -DDP
+./fcomp gcalc_dp.f gcalcpbc3.o -D_LM_=3 -DPERIODIC -DDP
+./fcomp lubrication_dp.f lubrication.o -DDP
+./fcomp lubrication_dp.f lubricationpbc.o -DPERIODIC -DDP
+#+end_example
+
+Compile and run the example application:
+#+begin_src sh :results output :exports both
+cd HYDROLIB
+guix environment --pure --ad-hoc tcsh coreutils sed gawk grep gfortran-toolchain
+./fc example.f
+./a.out
+#+end_src
+
+#+RESULTS:
+:  N=           6
+:    3.2887924196913199        4.2969105450808964     
+:    9.9128994543717965        94.715052511083215     
