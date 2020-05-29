@@ -21,13 +21,17 @@ Since the initial publication on GitHub, I made minor fixes to the setup scripts
 So far I have not been able to find the unpublished application programs. I have two backup tapes in DDS-1 and DDS-2 format from 1998 and 1999 that most probably contain a copy, but so far I have not been able to find a reader for these tapes. Until about 2010, I still had a PC with a tape reader in my office.
 
 * Reproducible HYDROLIB installation and test run
-The version of HYDROLIB that I published on GitHub in 2015, with modifications to the installation procedure for GNU Fortran under Linux, still works fine today. For the record, this is how installing and running the example application is done under Guix:
+The version of HYDROLIB that I published on GitHub in 2015, with modifications to the installation procedure for GNU Fortran under Linux, still works fine today.
+
+For the record, this section shows how installing and running the example application is done under Guix. Note that I use the =guix time=machine= command, which was added to Guix in November 2019. The instructions therefore won't work with older Guix versions. If you want to test the code with a different Guix version, make sure to choose a commit posterior to [[https://archive.softwareheritage.org/browse/revision/4ac5d4fee19aad08289ed10da15e32d937ea595d/][commit 4ac5d4fee19aad08289ed10da15e32d937ea595d]], dated 13 December 2019, 12:53 UTC, which added the package `gfortran-toolchain` required for interactive compilation of Fortran programs.
 
 ** Fix the Guix version
-To use the current Guix version on your system (the one from your last =guix pull=), replace =guix-command= by a plain =guix=.
+This work was done using [[https://archive.softwareheritage.org/browse/revision/f76c16d220e6c349441c08bf25a5197037490fa5/][commit f76c16d220e6c349441c08bf25a5197037490fa5]], dated 28 February 2020, 21:52 UTC.
+
 #+NAME: guix-command
 guix time-machine --commit=f76c16d220e6c349441c08bf25a5197037490fa5 --
 
+To use the current Guix version on your system (the one from your last =guix pull=), replace =guix-command= by a plain =guix=.
 ** Download and unpack the source code
 #+begin_src sh :results output :exports both :var guix_command=guix-command
 $guix_command environment --pure --ad-hoc wget unzip coreutils
