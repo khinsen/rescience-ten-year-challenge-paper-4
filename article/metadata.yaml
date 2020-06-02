@@ -82,11 +82,11 @@ review:
   - url: 
 
 contributors:
-  - name: 
+  - name: Tiziano Zito
     orcid: 
     role: editor
-  - name: 
-    orcid: 
+  - name: Roman Yurchak
+    orcid: 0000-0002-2565-4444
     role: reviewer
   - name:
     orcid:
@@ -94,7 +94,7 @@ contributors:
 
 # This information will be provided by the editor
 dates:
-  - received: 
+  - received: March 4, 2020
   - accepted: 
   - published: 
 
