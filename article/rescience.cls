@@ -293,6 +293,7 @@
 % --- Bibliography ------------------------------------------------------------
 \RequirePackage[
   backend=biber,
+  datamodel=software,
   style = numeric,
   % style=authoryear,
   sorting = none,
