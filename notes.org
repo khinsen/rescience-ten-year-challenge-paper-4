@@ -26,12 +26,11 @@ The version of HYDROLIB that I published on GitHub in 2015, with modifications t
 For the record, this section shows how installing and running the example application is done under Guix. Note that I use the =guix time=machine= command, which was added to Guix in November 2019. The instructions therefore won't work with older Guix versions. If you want to test the code with a different Guix version, make sure to choose a commit posterior to [[https://archive.softwareheritage.org/browse/revision/4ac5d4fee19aad08289ed10da15e32d937ea595d/][commit 4ac5d4fee19aad08289ed10da15e32d937ea595d]], dated 13 December 2019, 12:53 UTC, which added the package `gfortran-toolchain` required for interactive compilation of Fortran programs.
 
 ** Fix the Guix version
-This work was done using [[https://archive.softwareheritage.org/browse/revision/f76c16d220e6c349441c08bf25a5197037490fa5/][commit f76c16d220e6c349441c08bf25a5197037490fa5]], dated 28 February 2020, 21:52 UTC.
-
+This work was done using [[https://archive.softwareheritage.org/browse/revision/f76c16d220e6c349441c08bf25a5197037490fa5/][commit f76c16d220e6c349441c08bf25a5197037490fa5]], dated 28 February 2020, 21:52 UTC. To re-run the code with this same version, replace =$guix_command= in the following by:
 #+NAME: guix-command
 guix time-machine --commit=f76c16d220e6c349441c08bf25a5197037490fa5 --
 
-To use the current Guix version on your system (the one from your last =guix pull=), replace =guix-command= by a plain =guix=.
+To use the current Guix version on your system (the one from your last =guix pull=), replace =$guix_command= by a plain =guix=.
 ** Download and unpack the source code
 #+begin_src sh :results output :exports both :var guix_command=guix-command
 $guix_command environment --pure --ad-hoc wget unzip coreutils
