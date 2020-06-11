@@ -36,7 +36,7 @@ keywords: protein structure, protein crystals, normal modes, Python
 code:
   - url: https://github.com/khinsen/rescience-ten-year-challenge-paper-4
   - doi: 
-  - swh: 
+  - swh: swh:1:dir:195b7890e84d3bcdc1fdbbbc351c63ac69a64ba0
 
 # Data URL and DOI (optional if no data)
 data:
